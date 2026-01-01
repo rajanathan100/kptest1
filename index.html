@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1F4E79" />
+  <title>Kolapasi Canteen • Daily Stock</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">KC</div>
+      <div>
+        <div class="title">Kolapasi Canteen</div>
+        <div class="subtitle">Daily Stock Status</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="btnAdd" class="primary">+ Add Item</button>
+      <button id="btnExport" class="ghost">Export CSV</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="row wrap">
+        <label class="field">
+          <span>Date</span>
+          <input id="reportDate" type="date" />
+        </label>
+
+        <label class="field">
+          <span>Search</span>
+          <input id="search" type="search" placeholder="Item name / category / status" />
+        </label>
+
+        <label class="field">
+          <span>Filter</span>
+          <select id="filterStatus">
+            <option value="ALL">All</option>
+            <option value="OK">OK</option>
+            <option value="Reorder">Reorder</option>
+            <option value="Out of Stock">Out of Stock</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="summary">
+        <div class="chip">Total: <b id="sumTotal">0</b></div>
+        <div class="chip ok">OK: <b id="sumOk">0</b></div>
+        <div class="chip reorder">Reorder: <b id="sumReorder">0</b></div>
+        <div class="chip oos">Out of Stock: <b id="sumOos">0</b></div>
+        <div class="hint">Tip: Closing = Opening + In − Out. Status uses Reorder Level.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th class="num">Opening</th>
+              <th class="num">In</th>
+              <th class="num">Out</th>
+              <th class="num">Closing</th>
+              <th>Unit</th>
+              <th class="num">Reorder</th>
+              <th>Status</th>
+              <th>Remarks</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>Daily Close Checklist</h3>
+      <ol class="checklist">
+        <li>Update Opening, In, Out for each item.</li>
+        <li>Verify items marked <span class="pill reorder">Reorder</span> and place vendor orders.</li>
+        <li>Verify <span class="pill oos">Out of Stock</span> items and set alternate menu items if needed.</li>
+        <li>Export CSV if you want to send/share the report.</li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- Add/Edit Drawer -->
+  <div id="drawerBackdrop" class="backdrop hidden"></div>
+  <aside id="drawer" class="drawer hidden" aria-hidden="true">
+    <div class="drawerHeader">
+      <div>
+        <div class="drawerTitle" id="drawerTitle">Add Item</div>
+        <div class="drawerSub">Saved locally on your phone (works offline).</div>
+      </div>
+      <button id="btnClose" class="ghost">✕</button>
+    </div>
+
+    <form id="form" class="drawerBody">
+      <input type="hidden" id="itemId" />
+
+      <label class="field">
+        <span>Item Name *</span>
+        <input id="itemName" required placeholder="e.g., Rice, Chicken, Milk" />
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span>Category</span>
+          <select id="category">
+            <option>Veg</option>
+            <option>Non-Veg</option>
+            <option>Grocery</option>
+            <option>Beverage</option>
+            <option>Dairy</option>
+            <option>Spices</option>
+            <option>Packaging</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Unit</span>
+          <select id="unit">
+            <option>Kg</option>
+            <option>Ltr</option>
+            <option>Nos</option>
+            <option>Packets</option>
+            <option>Grams</option>
+            <option>ml</option>
+            <option>Bottles</option>
+            <option>Boxes</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row">
+        <label class="field">
+          <span>Opening</span>
+          <input id="opening" inputmode="decimal" type="number" min="0" step="0.01" value="0" />
+        </label>
+        <label class="field">
+          <span>Stock In</span>
+          <input id="stockIn" inputmode="decimal" type="number" min="0" step="0.01" value="0" />
+        </label>
+        <label class="field">
+          <span>Stock Out</span>
+          <input id="stockOut" inputmode="decimal" type="number" min="0" step="0.01" value="0" />
+        </label>
+      </div>
+
+      <div class="row">
+        <label class="field">
+          <span>Reorder Level</span>
+          <input id="reorder" inputmode="decimal" type="number" min="0" step="0.01" value="0" />
+        </label>
+        <label class="field grow">
+          <span>Remarks</span>
+          <input id="remarks" placeholder="Optional notes" />
+        </label>
+      </div>
+
+      <div class="drawerFooter">
+        <button type="submit" class="primary" id="btnSave">Save</button>
+        <button type="button" class="danger" id="btnDelete" style="display:none;">Delete</button>
+      </div>
+    </form>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
